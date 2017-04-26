@@ -234,7 +234,7 @@ public class Main_GUI extends JFrame{
     }
     private String getDownloadLinkFromHost() throws MalformedURLException, IOException
     {
-        String path = ""; //TODO: Create website, host .zip file & version/history. (Could leverage github.io for this)
+        String path = "http://programs.hazegaming.com/application/files/9314/9324/4463/NPC_Generator_-_HazeGaming_-_Mar_9_2017.zip"; //TODO: Create website, host .zip file & version/history. (Could leverage github.io for this)
         URL url = new URL(path);
 
         InputStream html = null;
