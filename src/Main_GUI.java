@@ -32,7 +32,7 @@ import javax.swing.JTextArea;
 public class Main_GUI extends JFrame{
 
     private Thread worker;
-    private final String root = "update/";
+    private final String root = "Update/";
 
     private JTextArea outText;
     private JButton cancel;
@@ -111,7 +111,7 @@ public class Main_GUI extends JFrame{
     }
     private void launch()
     {
-        String[] run = {"java","-jar","update app.jar"};
+        String[] run = {"java","-jar","NPC Character Creator.jar"};
         try {
             Runtime.getRuntime().exec(run);
         } catch (Exception ex) {
@@ -249,7 +249,7 @@ public class Main_GUI extends JFrame{
         buffer.append((char)c);
 
         }
-        return buffer.substring(buffer.indexOf("[url]")+5,buffer.indexOf("[/url]"));
+        return "http://programs.hazegaming.com/application/files/9314/9324/4463/NPC_Generator_-_HazeGaming_-_Mar_9_2017.zip"; //buffer.substring(buffer.indexOf("[url]")+5,buffer.indexOf("[/url]"));
     }
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
