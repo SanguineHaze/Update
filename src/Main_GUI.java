@@ -234,7 +234,7 @@ public class Main_GUI extends JFrame{
     }
     private String getDownloadLinkFromHost() throws MalformedURLException, IOException
     {
-        String path = "http://programs.hazegaming.com/application/files/9314/9324/4463/NPC_Generator_-_HazeGaming_-_Mar_9_2017.zip"; //TODO: Create website, host .zip file & version/history. (Could leverage github.io for this)
+        String path = "http://programs.hazegaming.com/npcgenstatus"; 
         URL url = new URL(path);
 
         InputStream html = null;
@@ -249,7 +249,7 @@ public class Main_GUI extends JFrame{
         buffer.append((char)c);
 
         }
-        return "http://programs.hazegaming.com/application/files/9314/9324/4463/NPC_Generator_-_HazeGaming_-_Mar_9_2017.zip"; //buffer.substring(buffer.indexOf("[url]")+5,buffer.indexOf("[/url]"));
+        return buffer.substring(buffer.indexOf("[url]")+5,buffer.indexOf("[/url]"));
     }
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
