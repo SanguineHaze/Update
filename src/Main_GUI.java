@@ -24,12 +24,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-
 /**
  *
  * @author Thomas Otero (H3R3T1C)
  */
-public class Main_GUI extends JFrame{
+public class Main_GUI extends JFrame {
 
     private Thread worker;
     private final String root = "Update/";
@@ -41,16 +40,15 @@ public class Main_GUI extends JFrame{
     private JPanel pan1;
     private JPanel pan2;
 
-     public Main_GUI() {
+    public Main_GUI() {
         initComponents();
         outText.setText("Contacting Download Server...");
         download();
     }
+
     private void initComponents() {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-       
 
         pan1 = new JPanel();
         pan1.setLayout(new BorderLayout());
@@ -61,10 +59,10 @@ public class Main_GUI extends JFrame{
         outText = new JTextArea();
         sp = new JScrollPane();
         sp.setViewportView(outText);
-        
+
         launch = new JButton("Launch App");
         launch.setEnabled(false);
-        launch.addActionListener(new ActionListener(){
+        launch.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
                 launch();
@@ -73,34 +71,31 @@ public class Main_GUI extends JFrame{
         pan2.add(launch);
 
         cancel = new JButton("Cancel Update");
-        cancel.addActionListener(new ActionListener(){
+        cancel.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
             }
         });
         pan2.add(cancel);
-        pan1.add(sp,BorderLayout.CENTER);
-        pan1.add(pan2,BorderLayout.SOUTH);
+        pan1.add(sp, BorderLayout.CENTER);
+        pan1.add(pan2, BorderLayout.SOUTH);
 
         add(pan1);
         pack();
         this.setSize(500, 400);
     }
 
-    private void download()
-    {
-        worker = new Thread(
-        new Runnable(){
-            public void run()
-            {
+    private void download() {
+        worker = new Thread(new Runnable() {
+            public void run() {
                 try {
                     downloadFile(getDownloadLinkFromHost());
                     unzip();
-                    copyFiles(new File(root),new File("").getAbsolutePath());
+                    copyFiles(new File(root), new File("").getAbsolutePath());
                     cleanup();
                     launch.setEnabled(true);
-                    outText.setText(outText.getText()+"\nUpdate Finished!");
+                    outText.setText(outText.getText() + "\nUpdate Finished!");
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "An error occured while preforming update!");
@@ -109,9 +104,9 @@ public class Main_GUI extends JFrame{
         });
         worker.start();
     }
-    private void launch()
-    {
-        String[] run = {"java","-jar","NPC Character Creator.jar"};
+
+    private void launch() {
+        String[] run = { "java", "-jar", "NPC Character Creator.jar" };
         try {
             Runtime.getRuntime().exec(run);
         } catch (Exception ex) {
@@ -119,105 +114,95 @@ public class Main_GUI extends JFrame{
         }
         System.exit(0);
     }
-    private void cleanup()
-    {
-        outText.setText(outText.getText()+"\nPreforming clean up...");
+
+    private void cleanup() {
+        outText.setText(outText.getText() + "\nPreforming clean up...");
         File f = new File("update.zip");
         f.delete();
         remove(new File(root));
         new File(root).delete();
     }
-    private void remove(File f)
-    {
-        File[]files = f.listFiles();
-        for(File ff:files)
-        {
-            if(ff.isDirectory())
-            {
+
+    private void remove(File f) {
+        File[] files = f.listFiles();
+        for (File ff : files) {
+            if (ff.isDirectory()) {
                 remove(ff);
                 ff.delete();
-            }
-            else
-            {
+            } else {
                 ff.delete();
             }
         }
     }
-    private void copyFiles(File f,String dir) throws IOException
-    {
-        File[]files = f.listFiles();
-        for(File ff:files)
-        {
-            if(ff.isDirectory()){
-                new File(dir+"/"+ff.getName()).mkdir();
-                copyFiles(ff,dir+"/"+ff.getName());
-            }
-            else
-            {
-                copy(ff.getAbsolutePath(),dir+"/"+ff.getName());
+
+    private void copyFiles(File f, String dir) throws IOException {
+        File[] files = f.listFiles();
+        for (File ff : files) {
+            if (ff.isDirectory()) {
+                new File(dir + "/" + ff.getName()).mkdir();
+                copyFiles(ff, dir + "/" + ff.getName());
+            } else {
+                copy(ff.getAbsolutePath(), dir + "/" + ff.getName());
             }
 
         }
     }
-    public void copy(String srFile, String dtFile) throws FileNotFoundException, IOException{
 
-          File f1 = new File(srFile);
-          File f2 = new File(dtFile);
+    public void copy(String srFile, String dtFile) throws FileNotFoundException, IOException {
 
-          InputStream in = new FileInputStream(f1);
+        File f1 = new File(srFile);
+        File f2 = new File(dtFile);
 
-          OutputStream out = new FileOutputStream(f2);
+        InputStream in = new FileInputStream(f1);
 
-          byte[] buf = new byte[1024];
-          int len;
-          while ((len = in.read(buf)) > 0){
+        OutputStream out = new FileOutputStream(f2);
+
+        byte[] buf = new byte[1024];
+        int len;
+        while ((len = in.read(buf)) > 0) {
             out.write(buf, 0, len);
-          }
-          in.close();
-          out.close();
-      }
-    private void unzip() throws IOException
-    {
-         int BUFFER = 2048;
-         BufferedOutputStream dest = null;
-         BufferedInputStream is = null;
-         ZipEntry entry;
-         ZipFile zipfile = new ZipFile("update.zip");
-         Enumeration e = zipfile.entries();
-         (new File(root)).mkdir();
-         while(e.hasMoreElements()) {
+        }
+        in.close();
+        out.close();
+    }
+
+    private void unzip() throws IOException {
+        int BUFFER = 2048;
+        BufferedOutputStream dest = null;
+        BufferedInputStream is = null;
+        ZipEntry entry;
+        ZipFile zipfile = new ZipFile("update.zip");
+        Enumeration e = zipfile.entries();
+        (new File(root)).mkdir();
+        while (e.hasMoreElements()) {
             entry = (ZipEntry) e.nextElement();
-            outText.setText(outText.getText()+"\nExtracting: " +entry);
-            if(entry.isDirectory())
-                (new File(root+entry.getName())).mkdir();
-            else{
-                (new File(root+entry.getName())).createNewFile();
-                is = new BufferedInputStream
-                  (zipfile.getInputStream(entry));
+            outText.setText(outText.getText() + "\nExtracting: " + entry);
+            if (entry.isDirectory())
+                (new File(root + entry.getName())).mkdir();
+            else {
+                (new File(root + entry.getName())).createNewFile();
+                is = new BufferedInputStream(zipfile.getInputStream(entry));
                 int count;
                 byte data[] = new byte[BUFFER];
-                FileOutputStream fos = new
-                  FileOutputStream(root+entry.getName());
-                dest = new
-                  BufferedOutputStream(fos, BUFFER);
-                while ((count = is.read(data, 0, BUFFER))
-                  != -1) {
-                   dest.write(data, 0, count);
+                FileOutputStream fos = new FileOutputStream(root + entry.getName());
+                dest = new BufferedOutputStream(fos, BUFFER);
+                while ((count = is.read(data, 0, BUFFER)) != -1) {
+                    dest.write(data, 0, count);
                 }
                 dest.flush();
                 dest.close();
                 is.close();
             }
-         }
+        }
 
     }
-    private void downloadFile(String link) throws MalformedURLException, IOException
-    {
+
+    private void downloadFile(String link) throws MalformedURLException, IOException {
         URL url = new URL(link);
         URLConnection conn = url.openConnection();
         InputStream is = conn.getInputStream();
         long max = conn.getContentLength();
-        outText.setText(outText.getText()+"\n"+"Downloding file...\nUpdate Size(compressed): "+max+" Bytes");
+        outText.setText(outText.getText() + "\n" + "Downloding file...\nUpdate Size(compressed): " + max + " Bytes");
         BufferedOutputStream fOut = new BufferedOutputStream(new FileOutputStream(new File("update.zip")));
         byte[] buffer = new byte[32 * 1024];
         int bytesRead = 0;
@@ -229,12 +214,12 @@ public class Main_GUI extends JFrame{
         fOut.flush();
         fOut.close();
         is.close();
-        outText.setText(outText.getText()+"\nDownload Complete!");
+        outText.setText(outText.getText() + "\nDownload Complete!");
 
     }
-    private String getDownloadLinkFromHost() throws MalformedURLException, IOException
-    {
-        String path = "http://programs.hazegaming.com/npcgenstatus"; 
+
+    private String getDownloadLinkFromHost() throws MalformedURLException, IOException {
+        String path = "http://programs.hazegaming.com/npcgenstatus";
         URL url = new URL(path);
 
         InputStream html = null;
@@ -244,13 +229,14 @@ public class Main_GUI extends JFrame{
         int c = 0;
         StringBuilder buffer = new StringBuilder("");
 
-        while(c != -1) {
+        while (c != -1) {
             c = html.read();
-        buffer.append((char)c);
+            buffer.append((char) c);
 
         }
-        return buffer.substring(buffer.indexOf("[url]")+5,buffer.indexOf("[/url]"));
+        return buffer.substring(buffer.indexOf("[url]") + 5, buffer.indexOf("[/url]"));
     }
+
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -259,7 +245,4 @@ public class Main_GUI extends JFrame{
         });
     }
 
-
 }
-
-
